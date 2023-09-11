@@ -1,35 +1,34 @@
 class Solution {
     public int evalRPN(String[] tokens) {
+        Set<String> set = new HashSet<>(List.of("+","-","*","/"));
         if(tokens.length == 1)
             return Integer.parseInt(tokens[0]);
         Stack<Integer> stack = new Stack<>();
-        int result = 1;
         for(String s : tokens){
-            if(isNumeric(s))
+            if(!set.contains(s))
                 stack.push(Integer.parseInt(s));
             else{
-                int num1 = stack.pop();
-                int num2 = stack.pop();
                 switch(s){
                     case "+":
-                        result = num1 + num2;
+                        stack.push(stack.pop() + stack.pop());
                         break;
                     case "-":
-                        result = num2 - num1;
+                        stack.push( - stack.pop() + stack.pop());
                         break;
                     case "*":
-                        result = num1 * num2;
+                        stack.push(stack.pop() * stack.pop());
                         break;
                     case "/":
-                        result = num2 / num1;
+                        int num = stack.pop();
+                        stack.push(stack.pop() / num);
                         break;
                 }
-                stack.push(result);
+                
             }
         }
-        return result;
+        return stack.pop();
     }
-    public boolean isNumeric(String strNum) {
+/*    public boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
         }
@@ -39,5 +38,5 @@ class Solution {
             return false;
         }
         return true;
-    }
+    }*/
 }
