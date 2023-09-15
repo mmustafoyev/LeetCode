@@ -1,42 +1,43 @@
 import java.util.*;
 
 class Solution {
+   private Stack<int[]> stack = new Stack<>();
+    private int[] dir = { 0, -1, 0, 1, 0};//direction
+    private int rowLen;
+    int colLen;
+
     public int numIslands(char[][] grid) {
-        int step = 0;
-        int row = grid.length;
-        int col = grid[0].length;
-        for(int i = 0; i < row; i++){
-            for(int j = 0;j < col; j++){
+        rowLen = grid.length;
+        colLen = grid[0].length;
+        int number = 0;
+        boolean[][] visited = new boolean[rowLen][colLen];
+        for(int i = 0; i < rowLen; i++){
+            for(int j = 0; j < colLen; j++){
                 if(grid[i][j] == '1'){
-                    step++;
-                    getBfs(grid, i, j);
-                }
+                    stack.push(new int[]{i,j});
+                    dfs(visited, grid, stack);
+                    number++;}
             }
         }
-
-        return step;
+        return number;
     }
 
-    private static void getBfs(char[][] grid, int startRow, int startCol) {
+    public void dfs(boolean[][] visited, char[][] grid, Stack<int[]> stack){
+        if(stack.isEmpty())return;
+        int row1 = stack.peek()[0];
+        int col1 = stack.pop()[1];
+        for(int i = 0; i < dir.length - 1; i++){
+            int row = row1 + dir[i];
+            int col = col1 + dir[i + 1];
+            if(row >= 0 && col >= 0 && row < rowLen && col < colLen && !visited[row][col] &&  grid[row][col] == '1'){
 
-        int numRows = grid.length;
-        int numCols = grid[0].length;
-        int[] dir = {-1, 0, 1, 0, -1};
-        List<List<Integer>> list = new ArrayList<>();
-        Queue<List<Integer>> queue = new LinkedList<>();
-        queue.offer(List.of(startRow,startCol));
-        grid[startRow][startCol] = '0';
-        while(!queue.isEmpty()){
-            int rowt = queue.peek().get(0);
-            int colt = queue.poll().get(1);
-            for (int i = 0; i < 4; i++) {
-                if((rowt + dir[i] < numRows) && (colt + dir[i+1] < numCols) &&
-                        (rowt + dir[i] >= 0) && (colt + dir[i+1] >= 0) && 
-                   grid[rowt + dir[i]][colt + dir[i + 1]] == '1'){
-                    grid[rowt + dir[i]][colt + dir[i + 1]] = '0';
-                    queue.offer(List.of(rowt + dir[i], colt + dir[i + 1]));
-                }
+                stack.push(new int[]{row, col});
+                visited[row][col] = true;
+                grid[row][col] = '0';
+                dfs(visited, grid, stack);
             }
         }
+        dfs(visited, grid, stack);
     }
+
 }
