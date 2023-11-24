@@ -15,7 +15,22 @@
  */
 class Solution {
     public int maxDepth(TreeNode root) {
-        Queue<List<TreeNode>> queue = new LinkedList<>();
+        if(root == null) return 0;
+        int leftDepth = maxDepth(root.left);
+        int rightDepth = maxDepth(root.right);
+
+        // The maximum depth is the maximum of left and right subtree depths, plus 1 for the current level.
+        return Math.max(leftDepth, rightDepth) + 1;
+        
+    }
+}
+/*
+return maxDepth(root.left) > maxDepth(root.right)?
+                maxDepth(root.left) + 1 :
+                maxDepth(root.right) + 1;
+        */
+/*
+Queue<List<TreeNode>> queue = new LinkedList<>();
         int count = 0;
         if (root == null) return count;
         queue.offer(List.of(root));
@@ -32,6 +47,4 @@ class Solution {
                 queue.offer(list);
             count++;
         }
-        return count;
-    }
-}
+        return count;*/
