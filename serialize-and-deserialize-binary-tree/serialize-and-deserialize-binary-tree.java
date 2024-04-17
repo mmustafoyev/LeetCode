@@ -32,7 +32,7 @@ public class Codec {
     }
 
     private TreeNode buildTree(String[] strings) {
-        if(index >= strings.length || strings[index].equals("null")){
+        if(index >= strings.length || "null".equals(strings[index])){
             index++;
             return null;
         }
